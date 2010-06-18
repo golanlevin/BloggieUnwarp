@@ -1,7 +1,10 @@
+<!-- BloggieUnwarper README                                    -->
 <!-- Settings File & Instruction Manual in one!                -->
-<!-- For BloggieUnwarper                                       -->
 <!-- Golan Levin & Solomon Bisker                              -->
 <!-- Made in openFrameworks, 2010                              -->
+<!-- Built for OpenFrameworks v.0061                           -->
+<!-- See: http://www.openframeworks.cc/download for complete   -->
+<!-- copies of the libraries used in this project.             -->
 <!--                                                           -->
 <!--                                                           -->
 <!-- Key commands for using the App.                           -->
@@ -12,6 +15,7 @@
 <!-- // Press 'v' to export the unwarped video.                -->
 <!-- // Use the arrow keys to nudge the center point.          -->
 <!-- // Drag the unwarped video left or right to shift it.     -->
+<!--                                                           -->
 <!--                                                           -->
 <!-- Documentation of UnwarperSettings.xml:                    -->
 <!-- INPUT_FILENAME:   Name of your input (warped) movie       -->
