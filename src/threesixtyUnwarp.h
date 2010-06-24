@@ -54,6 +54,7 @@ class threesixtyUnwarp : public ofBaseApp{
 		bool bPlayerPaused;
 		bool bCenterChanged;
 		bool bSavingOutVideo;
+		bool bSaveAudioToo;
 		int  nWrittenFrames;
 		int  codecQuality;
 		

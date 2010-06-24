@@ -7,14 +7,15 @@ void threesixtyUnwarp::setup(){
 	//---------------------------
 	// app properties
 	ofSetVerticalSync(false);
-	bMousePressed  = false;
-	bCenterChanged = false;
-	bPlayerPaused  = false;
+	bMousePressed   = false;
+	bCenterChanged  = false;
+	bPlayerPaused   = false;
 	bAngularOffsetChanged = false;
 	bMousePressedInPlayer = false;
 	bMousepressedInUnwarped = false;
 	bSavingOutVideo = false;
-	nWrittenFrames = 0;
+	bSaveAudioToo   = false;
+	nWrittenFrames  = 0;
 	handyString = new char[128];
 	outputFileName = "output.mov";
 
@@ -57,6 +58,9 @@ void threesixtyUnwarp::setup(){
 	// 0 = CV_INTER_NN, 1 = CV_INTER_LINEAR, 2 = CV_INTER_CUBIC.
 	interpMethod = (int) XML.getValue("INTERP_METHOD", 1); 
 	XML.setValue("INTERP_METHOD", (int) interpMethod);
+	
+	int bSaveAud = (int) XML.getValue("INCLUDE_AUDIO", 0); 
+	bSaveAudioToo = (bSaveAud != 0);
 	
 	/*
 	// straight rectilinearization
@@ -254,8 +258,10 @@ void threesixtyUnwarp::drawPlayer(){
 	ofSetColor(255,0,0);
 	ofDrawBitmapString("Drag cross or use",                  10, ty+=dy);
 	ofDrawBitmapString("arrow keys to recenter.",            10, ty+=dy);
-	ofDrawBitmapString("Press 's' to Save.",                 10, ty+=dy);
-	ofDrawBitmapString("Press 'r' to Restore.",              10, ty+=dy);
+	ofDrawBitmapString("Other key commands:",                 10, ty+=dy);
+	ofDrawBitmapString("'s' to Save settings.",                 10, ty+=dy);
+	ofDrawBitmapString("'r' to Restore settings.",              10, ty+=dy);
+	ofDrawBitmapString("'v' to export Video.",                  10, ty+=dy);
 	ofDrawBitmapString("cx: "   + ofToString((warpedCx)),    10, ty+=dy);
 	ofDrawBitmapString("cy: "   + ofToString((warpedCy)),    10, ty+=dy);
 	ofDrawBitmapString("rot:"   + ofToString((angularOffset)), 10, ty+=dy);
@@ -414,9 +420,11 @@ void threesixtyUnwarp::update(){
 			player.setLoopState(OF_LOOP_NORMAL);
 			if (videoRecorder->bAmSetupForRecording()){
 				
-				// Strip audio from the original input movie; add it.
-				string audioPath = XML.getValue("INPUT_FILENAME", "input.mov");
-				videoRecorder->addAudioTrack(audioPath);
+				if (bSaveAudioToo){
+					// Strip audio from the original input movie; add it.
+					string audioPath = XML.getValue("INPUT_FILENAME", "input.mov");
+					videoRecorder->addAudioTrack(audioPath);
+				}
 				videoRecorder->finishMovie();
 				printf("Finished exporting movie!\n"); 
 			}
@@ -519,7 +527,7 @@ void threesixtyUnwarp::keyPressed  (int key){
 					inName = inName.substr (0, inNameLastDotIndex);
 				}
 				sprintf(handyString, "%2d%2d%2d.mov", ofGetHours(), ofGetMinutes(), ofGetSeconds());
-				inName += "_unwarped_" + ofToString(ofGetHours()) + ofToString(ofGetMinutes()) + ofToString(ofGetSeconds()) + ".mov"; 
+				inName += "_out_" + ofToString(ofGetHours()) + ofToString(ofGetMinutes()) + ofToString(ofGetSeconds()) + ".mov"; 
 				outputFileName = inName;
 				
 				videoRecorder->setup(unwarpedW, unwarpedH, outputFileName);
